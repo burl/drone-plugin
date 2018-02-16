@@ -1,4 +1,5 @@
-# drone-plugin - environment and arg parsing for writing drone plugins in node
+# drone-plugin
+> environment and arg parsing for writing drone plugins in node
 
 This package provies an API for parsing and validating the DRONE_*
 and PLUGIN_* envvars that are used by drone to pass build context to plugins.
