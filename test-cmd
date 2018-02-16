@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+const assert = require('assert');
+const { argParse } = require('.');
+
+function main() {
+  for (const name of Object.keys(process.env)) {
+    if (RegExp(/^(DRONE|PLUGIN)_/).test(name)) console.error(`DBG> ${name} = ${JSON.stringify(process.env[name])}`);
+  }
+
+  const {fooBar, barBaz, drone:{buildNumber}} = argParse()
+    .arg('fooBar=n', 'barBaz=n')
+    .dump()
+    .parse();
+
+  console.log('drone build number is', buildNumber);
+  console.log('plugin argument fooBar is', fooBar);
+  console.log('plugin argument barBaz is', barBaz);
+  console.log(`fooBar + ${buildNumber} = ${fooBar + buildNumber}`);
+  console.log(`fooBar + barBaz is ${fooBar + barBaz}`)
+  assert(fooBar + barBaz === 9, 'the two known numeric parameters should equal 9');
+}
+
+main();

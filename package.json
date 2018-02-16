@@ -1,0 +1,34 @@
+{
+  "name": "drone-arg-parse",
+  "description": "python object serialize/deserialize for node",
+  "author": "Burl Nyswonger <burl.bn@gmail.com> (https://github.com/burl)",
+  "contributors": [],
+  "license": "MIT",
+  "homepage": "https://github.com/burl/node-py-marshal",
+  "repository": {
+    "url": "https://github.com/burl/node-py-marshal",
+    "type": "git"
+  },
+  "bugs": "https://github.com/burl/node-py-marshal/issues",
+  "version": "1.0.0",
+  "main": "lib/drone",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "ava -v"
+  },
+  "dependencies": {
+    "ieee754": "^1.1.8"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0"
+  },
+  "keywords": [
+    "drone",
+    "plugin"
+  ],
+  "engines": {
+    "node": ">=8.0"
+  }
+}

@@ -1,0 +1,19 @@
+pipeline:
+  build:
+    image: node:8
+    commands:
+      - yarn install
+      - yarn test
+      - yarn pack --filename=package.tgz
+
+  build-image:
+    image: docker
+    commands:
+      - docker build -t drone-plugin-test:latest .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  test:
+    image: drone-plugin-test:latest
+    foo_bar: 2
+    bar_baz: 7
