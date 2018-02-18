@@ -1,4 +1,4 @@
-# drone-plugin - argument parsing for drone plugins
+# drone-arg-parse - argument parsing for drone plugins
 
 [![Build Status](https://travis-ci.org/burl/drone-plugin.svg?branch=master)](https://travis-ci.org/burl/drone-plugin) [![npm version](https://badge.fury.io/js/drone-arg-parse.svg)](https://badge.fury.io/js/drone-arg-parse) [![Coverage Status](https://coveralls.io/repos/github/burl/drone-plugin/badge.svg?branch=master)](https://coveralls.io/github/burl/drone-plugin?branch=master)
 
