@@ -16,13 +16,15 @@
     "lib"
   ],
   "scripts": {
-    "test": "ava -v"
+    "test": "ava -v",
+    "cover": "nyc ava -v test",
+    "cover:report": "nyc report -r lcov"
   },
   "dependencies": {
-    "ieee754": "^1.1.8"
   },
   "devDependencies": {
-    "ava": "^0.25.0"
+    "ava": "^0.25.0",
+    "nyc": "^11.4.1"
   },
   "keywords": [
     "drone",
