@@ -1,7 +1,7 @@
-[![Build Status](https://travis-ci.org/burl/drone-plugin.svg?branch=master)](https://travis-ci.org/burl/drone-plugin)
+# drone-plugin - argument parsing for drone plugins
 
-# drone-plugin
-> environment and arg parsing for writing drone plugins in node
+[![Build Status](https://travis-ci.org/burl/drone-plugin.svg?branch=master)](https://travis-ci.org/burl/drone-plugin) [![npm version](https://badge.fury.io/js/drone-plugin.svg)](https://badge.fury.io/js/drone-plugin) [![Coverage Status](https://coveralls.io/repos/github/burl/drone/badge.svg?branch=master)](https://coveralls.io/github/burl/drone?branch=master)
+
 
 This package provies an API for parsing and validating the DRONE_*
 and PLUGIN_* envvars that are used by drone to pass build context to plugins.
