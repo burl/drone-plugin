@@ -1,6 +1,6 @@
 # drone-plugin - argument parsing for drone plugins
 
-[![Build Status](https://travis-ci.org/burl/drone-plugin.svg?branch=master)](https://travis-ci.org/burl/drone-plugin) [![npm version](https://badge.fury.io/js/drone-plugin.svg)](https://badge.fury.io/js/drone-plugin) [![Coverage Status](https://coveralls.io/repos/github/burl/drone/badge.svg?branch=master)](https://coveralls.io/github/burl/drone?branch=master)
+[![Build Status](https://travis-ci.org/burl/drone-plugin.svg?branch=master)](https://travis-ci.org/burl/drone-plugin) [![npm version](https://badge.fury.io/js/drone-plugin.svg)](https://badge.fury.io/js/drone-plugin) [![Coverage Status](https://coveralls.io/repos/github/burl/drone-plugin/badge.svg?branch=master)](https://coveralls.io/github/burl/drone-plugin?branch=master)
 
 
 This package provies an API for parsing and validating the DRONE_*
