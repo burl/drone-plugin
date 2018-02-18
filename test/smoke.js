@@ -5,11 +5,17 @@ import { argParse } from '..';
 test('smoke', t => {
   const env = {
     DRONE_BUILD_NUMBER: '42',
+    DRONE_UNKNOWN_VARIABLE: 'foo',
     PLUGIN_FOO: 'bar',
+    PLUGIN_HORK: '23',
   };
-  const args = argParse.useEnv(env, () => argParse().droneEnv);
-  t.true(args.hasOwnProperty('buildNumber'), 'has buildNumber');
-  t.true(args.buildNumber === 42, 'buildNumber is 42');
+  const pluginEnv = argParse.useEnv(env, () => argParse().plugin);
+  const droneEnv = argParse.useEnv(env, () => argParse().drone);
+  t.true(droneEnv.hasOwnProperty('buildNumber'), 'has buildNumber');
+  t.true(droneEnv.buildNumber === 42, 'buildNumber is 42');
+  t.true(pluginEnv.hasOwnProperty('foo'));
+  t.true(pluginEnv.foo === 'bar');
+  t.deepEqual(pluginEnv, {foo: 'bar', hork: '23'});
 });
 
 test('boolean type support', t => {
@@ -50,6 +56,7 @@ test('boolean type support', t => {
 
   const values = args.parse();
   delete values.drone;
+  delete values.ci;
   t.deepEqual(values, expected, 'boolean coercion');
 });
 
@@ -70,6 +77,7 @@ test('number type support', t => {
     noses: 1,
   }
   delete values.drone;
+  delete values.ci;
   t.deepEqual(values, expected, 'numeric coercion');
 });
 
@@ -95,6 +103,7 @@ test('many types', t => {
     .date('birthday');
   const values = args.parse();
   delete values.drone;
+  delete values.ci;
   t.deepEqual(values, expected, 'kitchen-sink test');
 });
 
@@ -128,3 +137,34 @@ test('drone', t => {
   t.true(drone.buildNumber === 42);
   t.true(drone.buildStatus === 'success');
 });
+
+test('object', t => {
+  const env = {
+    PLUGIN_STUFF: '{"foo":42,"bar":[true,2,"three"]}',
+  }
+  const { stuff } = argParse(env).arg('stuff={}').parse();
+  const expected = {
+    foo: 42,
+    bar: [true, 2, "three"]
+  };
+  t.deepEqual(stuff, expected, 'object serialization');
+});
+
+test('slice', t => {
+  const env = {
+    PLUGIN_SLICE_VERSIONS: '1.0.0,1.0,1',
+    PLUGIN_SLICE_NUMBERS: '3,2,1',
+    PLUGIN_SLICE_STRINGS: 'foo,bar,baz',
+    PLUGIN_SLICE_DATES: '2018-02-14,2018-07-04',
+    PLUGIN_SLICE_BOOLS: 'true,false,true',
+  }
+  const { sliceVersions, sliceNumbers, sliceStrings, sliceDates, sliceBools } =
+    argParse(env)
+      .arg('sliceVersions=[]','sliceNumbers=[n]','sliceStrings=[s]','sliceDates=[d]','sliceBools=[b]')
+      .parse();
+  t.deepEqual(sliceVersions, ['1.0.0','1.0','1'], 'sliceVersions (strings by default)');
+  t.deepEqual(sliceNumbers, [3,2,1], 'slice of numbers');
+  t.deepEqual(sliceStrings, ['foo','bar','baz'], 'slice of strings (explicit decl)');
+  t.deepEqual(sliceDates, [new Date('2018-02-14'), new Date('2018-07-04')], 'slice of dates');
+  t.deepEqual(sliceBools, [true,false,true], 'slice of booleans');
+})

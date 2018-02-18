@@ -7,16 +7,21 @@ function main() {
     if (RegExp(/^(DRONE|PLUGIN)_/).test(name)) console.error(`DBG> ${name} = ${JSON.stringify(process.env[name])}`);
   }
 
-  const {fooBar, barBaz, drone:{buildNumber}} = argParse()
-    .arg('fooBar=n', 'barBaz=n')
+  const {fooBar, barBaz, template, someThings, fileParam, drone:{buildNumber}} = argParse()
+    .arg('fooBar=n', 'barBaz=n', 'template=o', 'someThings=as')
     .dump()
     .parse();
+
+  const data = require('fs').readFileSync(fileParam, 'utf8');
+  console.log(`data from ${fileParam}`, JSON.stringify(JSON.parse(data)));
 
   console.log('drone build number is', buildNumber);
   console.log('plugin argument fooBar is', fooBar);
   console.log('plugin argument barBaz is', barBaz);
   console.log(`fooBar + ${buildNumber} = ${fooBar + buildNumber}`);
   console.log(`fooBar + barBaz is ${fooBar + barBaz}`)
+  console.log('someThings:', JSON.stringify(someThings));
+  console.log('template', JSON.stringify(template, null, 2));
   assert(fooBar + barBaz === 9, 'the two known numeric parameters should equal 9');
 }
 

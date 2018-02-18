@@ -10,6 +10,7 @@ pipeline:
     image: docker
     commands:
       - docker build -t drone-plugin-test:latest .
+      - echo '{"foo":"bar"}' > foobar.json
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
@@ -17,3 +18,17 @@ pipeline:
     image: drone-plugin-test:latest
     foo_bar: 2
     bar_baz: 7
+    file_param: foobar.json
+    some_things:
+      - one
+      - two
+      - III
+      - this build ${DRONE_BUILD_STATUS}
+    template:
+      name: drone
+      messages:
+        - title: foobar
+          text: This is some text and what not
+          icon: http://someplace.com/somefile.png
+        - title: blarg
+          text: foo
