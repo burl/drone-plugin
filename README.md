@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/burl/drone-plugin.svg?branch=master)](https://travis-ci.org/burl/drone-plugin)
+
 # drone-plugin
 > environment and arg parsing for writing drone plugins in node
 
