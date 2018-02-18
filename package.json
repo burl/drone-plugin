@@ -1,15 +1,15 @@
 {
   "name": "drone-arg-parse",
-  "description": "python object serialize/deserialize for node",
+  "description": "parse CI and plugin params for drone plugins",
   "author": "Burl Nyswonger <burl.bn@gmail.com> (https://github.com/burl)",
   "contributors": [],
   "license": "MIT",
-  "homepage": "https://github.com/burl/node-py-marshal",
+  "homepage": "https://github.com/burl/drone-plugin",
   "repository": {
-    "url": "https://github.com/burl/node-py-marshal",
+    "url": "https://github.com/burl/drone-plugin",
     "type": "git"
   },
-  "bugs": "https://github.com/burl/node-py-marshal/issues",
+  "bugs": "https://github.com/burl/drone-plugin/issues",
   "version": "1.0.0",
   "main": "lib/drone",
   "files": [
