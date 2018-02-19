@@ -1,6 +1,14 @@
 import test from 'ava';
 import { argParse } from '..';
 
+test('strings by default', t => {
+  const env = { PLUGIN_FOO: 'blarg' };
+  const { foo } = argParse(env)
+    .arg('foo')
+    .parse();
+  t.true(foo === 'blarg');
+});
+
 test('boolean type support', t => {
   const env = {
     PLUGIN_FOO_BOOL: 'true',
