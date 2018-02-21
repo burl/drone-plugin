@@ -11,6 +11,7 @@ test('boolean type support', t => {
     PLUGIN_BAZ: 'true',
     PLUGIN_UNSTATED: 'true',
     PLUGIN_OTHER: 'stringvalue',
+    PLUGIN_EMPTY: '',
   };
   const args = argParse(env)
     .arg('fooBool=b!');
@@ -21,7 +22,7 @@ test('boolean type support', t => {
   t.true(args.schema.true1.type === 'boolean');
   t.true(args.schema.true2.type === 'boolean');
 
-  args.boolean(['barBool','true3'], 'baz');
+  args.boolean(['barBool','true3'], 'baz', 'empty');
   t.true(args.schema.barBool.type === 'boolean');
   t.true(args.schema.baz.type === 'boolean');
   t.true(args.schema.true3.type === 'boolean');
@@ -34,11 +35,11 @@ test('boolean type support', t => {
     true3: true,
     baz: true,
     unstated: 'true',
-    other: 'stringvalue'
+    other: 'stringvalue',
+    empty: false,
   };
 
   const values = args.parse();
-  delete values.drone;
   delete values.ci;
   t.deepEqual(values, expected, 'boolean coercion');
 });
@@ -59,7 +60,6 @@ test('number type support', t => {
     beers: 7,
     noses: 1,
   }
-  delete values.drone;
   delete values.ci;
   t.deepEqual(values, expected, 'numeric coercion');
 });
@@ -89,6 +89,7 @@ test('many types', t => {
     PLUGIN_NUMBER_OF_FINGERS: '10',
     PLUGIN_BIRTHDAY: '1967-10-01',
     PLUGIN_TIMEVAL: '1518962895510',
+    PLUGIN_TIMESTAMP: '1518962895510',
   };
   const expected = {
     name: 'Fred',
@@ -97,15 +98,16 @@ test('many types', t => {
     numberOfFingers: 10,
     birthday: new Date('1967-10-01 00:00:00 UTC'),
     timeval: new Date('+050104-01-08 01:38:30 UTC'),
+    timestamp: new Date('+050104-01-08 01:38:30 UTC'),
   };
   const args = argParse(env)
     .number('age','numberOfFingers')
     .boolean('likesBeer')
     .string('name')
     .date('birthday')
-    .arg('timeval=d');
+    .arg('timeval=d')
+    .arg('timestamp=t');
   const values = args.parse();
-  delete values.drone;
   delete values.ci;
   t.deepEqual(values, expected, 'kitchen-sink test');
 });
@@ -116,17 +118,19 @@ test('slice', t => {
     PLUGIN_SLICE_NUMBERS: '3,2,1',
     PLUGIN_SLICE_STRINGS: 'foo,bar,baz',
     PLUGIN_SLICE_DATES: '2018-02-14,2018-07-04',
+    PLUGIN_SLICE_TS: '1518962895510,1518962895510',
     PLUGIN_SLICE_BOOLS: 'true,false,true',
   }
-  const { sliceVersions, sliceNumbers, sliceStrings, sliceDates, sliceBools } =
+  const { sliceVersions, sliceNumbers, sliceStrings, sliceDates, sliceBools, sliceTs } =
     argParse(env)
-      .arg('sliceVersions=as','sliceNumbers=[n]','sliceStrings=[s]','sliceDates=[d]','sliceBools=[b]')
+      .arg('sliceVersions=as','sliceNumbers=[n]','sliceStrings=[s]','sliceDates=[d]','sliceBools=[b]', 'sliceTs=[t]')
       .parse();
   t.deepEqual(sliceVersions, ['1.0.0','1.0','1'], 'sliceVersions (strings by default)');
   t.deepEqual(sliceNumbers, [3,2,1], 'slice of numbers');
   t.deepEqual(sliceStrings, ['foo','bar','baz'], 'slice of strings (explicit decl)');
   t.deepEqual(sliceDates, [new Date('2018-02-14'), new Date('2018-07-04')], 'slice of dates');
   t.deepEqual(sliceBools, [true,false,true], 'slice of booleans');
+  t.deepEqual(sliceTs, [new Date('+050104-01-08 01:38:30 UTC'), new Date('+050104-01-08 01:38:30 UTC')], 'slice of timestamps');
 });
 
 test('object', t => {

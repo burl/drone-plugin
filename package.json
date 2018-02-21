@@ -1,16 +1,16 @@
 {
-  "name": "drone-arg-parse",
+  "name": "drone-plugin",
   "description": "parse CI and plugin params for drone plugins",
   "author": "Burl Nyswonger <burl.bn@gmail.com> (https://github.com/burl)",
   "contributors": [],
   "license": "MIT",
-  "homepage": "https://github.com/burl/drone-plugin",
+  "homepage": "https://github.com/burl/node-drone-plugin",
   "repository": {
-    "url": "https://github.com/burl/drone-plugin",
+    "url": "https://github.com/burl/node-drone-plugin",
     "type": "git"
   },
-  "bugs": "https://github.com/burl/drone-plugin/issues",
-  "version": "1.0.1",
+  "bugs": "https://github.com/burl/node-drone-plugin/issues",
+  "version": "1.0.5",
   "main": "lib/drone",
   "files": [
     "lib"
@@ -20,7 +20,9 @@
     "cover": "nyc ava -v test",
     "cover:report": "nyc report -r lcov"
   },
-  "dependencies": {},
+  "dependencies": {
+    "cncd-env": "^1.0.1"
+  },
   "devDependencies": {
     "ava": "^0.25.0",
     "coveralls": "^3.0.0",

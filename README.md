@@ -1,15 +1,15 @@
 # drone-plugin - argument parsing for drone plugins
 
-[![Build Status](https://travis-ci.org/burl/drone-plugin.svg?branch=master)](https://travis-ci.org/burl/drone-plugin) [![npm version](https://badge.fury.io/js/drone-arg-parse.svg)](https://badge.fury.io/js/drone-arg-parse) [![Coverage Status](https://coveralls.io/repos/github/burl/drone-plugin/badge.svg?branch=master)](https://coveralls.io/github/burl/drone-plugin?branch=master)
+[![Build Status](https://travis-ci.org/burl/node-drone-plugin.svg?branch=master)](https://travis-ci.org/burl/node-drone-plugin) [![npm version](https://badge.fury.io/js/drone-plugin.svg)](https://badge.fury.io/js/drone-plugin) [![Coverage Status](https://coveralls.io/repos/github/burl/node-drone-plugin/badge.svg?branch=master)](https://coveralls.io/github/burl/node-drone-plugin?branch=master)
 
 
-This package provies an API for parsing and validating the DRONE_*
+This package provies an API for parsing and validating the CI_*
 and PLUGIN_* envvars that are used by drone to pass build context to plugins.
 
 ## Installation
 
 ```shell
-yarn add drone-arg-parse
+yarn add drone-plugin
 ```
 
 ## Example
@@ -26,13 +26,14 @@ pipeline:
 
 This module makes it easy to parse, validate and coerce those plugin
 parameters as well as the drone build state variables, which are passed
-to your plugin in the environment in upper-case variable names.
+to your plugin in the environment in upper-case variable names. It will
+also do the same for the CI-context metadata (variables matching /^CI_.+/).
 
 Example:
 
 ```javascript
-const { argParse } = require('drone-arg-parse');
-const { webhook, timeout = 10, drone:ci } = argParse()
+const { argParse } = require('drone-plugin');
+const { webhook, timeout = 10, ci } = argParse()
   .arg('webhook=s!', 'timeout=n')
   .parse();
 
@@ -48,23 +49,24 @@ const req = require('request')({
 
 ## Parsing arguments and CI context
 
-drone creates `UPPER_CASE` named envvars for both CI-context and plugin parameters, but for purely aesthetic reasons, this API converts them to `camelCase` representations, dropping the `DRONE_` or `PLUGIN_` prefix.
+drone creates `UPPER_CASE` named envvars for both CI-context and plugin parameters, but for purely aesthetic reasons, this API converts them to `camelCase` representations, dropping the `CI_` or `PLUGIN_` prefix.
 
-The `argParse()` function returns an instance of class `Args`, which has various chainable methods for informing the argument parser of the plugin arguments, their types and whether or not they are required.  The `parse()` method returns an object that contains all of this information as well as an embedded object named `drone` with the CI context (all of the `DRONE_` args).
+The `argParse()` function returns an instance of class `Args`, which has various chainable methods for informing the argument parser of the plugin arguments, their types and whether or not they are required.  The `parse()` method returns an object that contains all of this information as well as an embedded object named `drone` with the CI context (all of the `CI_` args).
 
 ### Argument spec strings
 
 The `.arg()` method can be used to declare argument(s) along with type and demand hints included after an `=` in the name.
 
-| hint char | purpose                       |
-| --------- | ----------------------------- |
-| s         | string (default when no hint) |
-| n         | numeric                       |
-| b         | boolean                       |
-| d         | date                          |
-| o         | object (also {})              |
-| a         | array (slice) also []         |
-| !         | flag argument as required     |
+| hint char | purpose                         |
+| --------- | ------------------------------- |
+| s         | string (default when no hint)   |
+| n         | numeric                         |
+| b         | boolean                         |
+| t         | timestamp (seconds since epoch) |
+| d         | date                            |
+| o         | object (also {})                |
+| a         | array (slice) also []           |
+| !         | flag argument as required       |
 
 The `array` type can be combined with a scalar type.
 
@@ -77,7 +79,7 @@ The above declares two arguments:
 * title is a string argument and is required
 * tags is an array of strings
 
-The step in the `drone.yml` file that shoudl exist for the above example would look like this:
+The step in the `drone.yml` file that should exist for the above example would look like this:
 
 ```yaml
   myplugin:
@@ -93,6 +95,13 @@ The step in the `drone.yml` file that shoudl exist for the above example would l
 
 *chainable*, this is detailed above.  Note that you may pass a list of argument specs in one call to `.arg()` or you may invoke `.arg()` for each argument you are declaring.
 
+These are all equivalent:
+```javascript
+argParse().arg('name=s').arg('age=n');     //...
+argParse().arg('name=s', 'age=n!');        // ...
+argParse().string('name').number('age=!'); // ...
+```
+
 ##### .boolean(name [,...])
 ##### .number(name [,...])
 ##### .string(name [,...])
@@ -107,17 +116,25 @@ The step in the `drone.yml` file that shoudl exist for the above example would l
 
 ##### .parse()
 
-This returns an object containing all of the parsed arguments as well as an embedded object named `drone` that contains the drone CI-context.
+This returns an object containing all of the parsed arguments as well as an embedded object named `ci` that contains the drone CI-context.
 
 ### Args properties
 
-##### .drone
+##### .ci
 
 The drone environment variables, camelized and coerced.
 
 ##### .plugin
 
 The plugin environment variables, camelized.
+
+##### .env
+
+An object containing both the `ci` and `plugin` variables.
+
+## See Also
+
+* [cncd-env](https://github.com/burl/node-cncd-env)
 
 ## License
 
