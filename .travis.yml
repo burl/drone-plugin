@@ -2,7 +2,6 @@ language: node_js
 after_script: "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
 script:
   - yarn install
-  - yarn run test
   - yarn run cover
   - yarn run cover:report
 node_js:
